@@ -13,6 +13,74 @@
 	}
 }
 
+@keyframes social-float {
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
+@keyframes float-heart {
+	0%,
+	100% {
+		opacity: 0.22;
+		transform: translateY(0) scale(0.9);
+	}
+	50% {
+		opacity: 0.6;
+		transform: translateY(-18px) scale(1.08);
+	}
+}
+
+.social-float {
+	animation: social-float 3.5s ease-in-out infinite;
+}
+
+.about-heart {
+	position: absolute;
+	display: block;
+	font-size: 1.8rem;
+	color: rgba(255, 255, 255, 0.55);
+	animation: float-heart 7s ease-in-out infinite;
+	text-shadow: 0 0 18px rgba(236, 72, 153, 0.25);
+}
+
+.heart-one {
+	top: 8%;
+	left: 12%;
+	animation-delay: 0s;
+}
+
+.heart-two {
+	top: 18%;
+	right: 16%;
+	animation-delay: 1.2s;
+}
+
+.heart-three {
+	bottom: 18%;
+	left: 18%;
+	font-size: 1.4rem;
+	animation-delay: 2.4s;
+}
+
+.heart-four {
+	bottom: 12%;
+	right: 22%;
+	font-size: 1.5rem;
+	animation-delay: 3.6s;
+}
+
+.heart-five {
+	top: 46%;
+	left: 48%;
+	font-size: 1.2rem;
+	animation-delay: 4.8s;
+}
+
 .hero-bubble {
 	position: absolute;
 	display: block;
