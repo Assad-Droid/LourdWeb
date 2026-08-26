@@ -87,12 +87,13 @@ function Services() {
             >
               <span aria-hidden="true" className="services-card-shine" />
               <span aria-hidden="true" className="services-card-orbit" />
-              <span className="pointer-events-none absolute -right-4 -top-8 text-[10rem] font-bold leading-none text-pink-200/45 transition-transform duration-500 group-hover:scale-110 group-hover:text-pink-300/55">
-                {String(service.id).padStart(2, "0")}
-              </span>
 
               <div>
-                <div className="relative mb-16 flex items-center justify-between">
+                <div className="service-image-slot relative mb-8 aspect-[4/3] overflow-hidden rounded-[1.5rem] border border-white/70">
+                  <span aria-hidden="true" className="service-image-glow" />
+                </div>
+
+                <div className="relative mb-8 flex items-center justify-between">
                   <span className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-600">
                     Signature service
                   </span>
@@ -121,12 +122,12 @@ function Services() {
                 <a
                   href="/booking"
                   aria-label={`Book ${service.name}`}
-                  className="flex h-11 w-11 items-center justify-center rounded-full bg-gray-900 text-xl text-white transition-all duration-500 hover:scale-110 hover:bg-pink-500 group-hover:w-28 group-hover:rounded-full group-hover:bg-pink-500"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-900 text-white transition-all duration-300 hover:scale-110 hover:bg-pink-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500"
                 >
-                  <span className="text-sm opacity-0 transition-opacity duration-300 group-hover:mr-1 group-hover:opacity-100">
-                    Book
-                  </span>
-                  <span className="transition-transform duration-500 group-hover:rotate-[-45deg]">&rarr;</span>
+                  <svg viewBox="0 0 24 24" className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M5 19 19 5" />
+                    <path d="M8 5h11v11" />
+                  </svg>
                 </a>
               </div>
             </article>

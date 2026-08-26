@@ -144,6 +144,35 @@
 	pointer-events: none;
 }
 
+.service-image-slot {
+	background: radial-gradient(circle at 70% 25%, rgb(255 255 255 / 85%), transparent 28%), linear-gradient(135deg, rgb(255 255 255 / 52%), rgb(249 215 230 / 75%));
+	transition: transform 500ms ease, box-shadow 500ms ease;
+}
+
+.service-image-slot::after {
+	position: absolute;
+	inset: 12%;
+	border: 1px solid rgb(255 255 255 / 65%);
+	border-radius: 1rem;
+	content: "";
+}
+
+.service-image-glow {
+	position: absolute;
+	top: 18%;
+	right: 18%;
+	width: 4rem;
+	height: 4rem;
+	border-radius: 9999px;
+	background: rgb(255 255 255 / 45%);
+	filter: blur(18px);
+}
+
+.services-card:hover .service-image-slot {
+	transform: scale(1.03) rotate(-1deg);
+	box-shadow: 0 12px 24px rgb(190 24 93 / 12%);
+}
+
 .services-card:hover .services-card-orbit {
 	transform: scale(1.35) rotate(22deg);
 	border-color: rgb(236 72 153 / 38%);
@@ -223,7 +252,8 @@
 	.hero-bubble,
 	.services-botanical,
 	.services-card,
-	.services-card-shine {
+	.services-card-shine,
+	.service-image-slot {
 		animation: none;
 		transition: none;
 	}
