@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+html, body {
+	margin: 0;
+	min-height: 100%;
+	background: #f8c8dc;
+}
+
+body {
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
 @keyframes hero-bubble-float {
 	0%,
 	100% {
@@ -248,12 +259,41 @@
 	animation-delay: -5s;
 }
 
+@media (max-width: 640px) {
+	.social-float {
+		width: 2.8rem;
+		height: 2.8rem;
+	}
+
+	.about-heart {
+		opacity: 0.45;
+		font-size: 1.2rem;
+	}
+
+	.hero-bubble-one,
+	.hero-bubble-two,
+	.hero-bubble-three,
+	.hero-bubble-four,
+	.hero-bubble-five {
+		opacity: 0.7;
+	}
+}
+
+@media (max-width: 768px) {
+	.services-botanical {
+		opacity: 0.3;
+		transform: scale(0.75);
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.hero-bubble,
 	.services-botanical,
 	.services-card,
 	.services-card-shine,
-	.service-image-slot {
+	.service-image-slot,
+	.social-float,
+	.about-heart {
 		animation: none;
 		transition: none;
 	}
