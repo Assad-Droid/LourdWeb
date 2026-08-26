@@ -81,6 +81,95 @@
 	animation-delay: 4.8s;
 }
 
+.services-botanical {
+	position: absolute;
+	width: 11rem;
+	height: 15rem;
+	color: rgb(244 114 182 / 16%);
+	animation: botanical-sway 8s ease-in-out infinite;
+}
+
+.services-botanical-left {
+	left: -2rem;
+	top: 18%;
+}
+
+.services-botanical-right {
+	right: -2rem;
+	bottom: 12%;
+	animation-delay: -3s;
+}
+
+.services-flower {
+	color: rgb(236 72 153 / 22%);
+}
+
+.services-card {
+	animation: service-card-appear 700ms both;
+}
+
+.services-card:nth-child(2) {
+	animation-delay: 120ms;
+}
+
+.services-card:nth-child(3) {
+	animation-delay: 240ms;
+}
+
+.services-card-shine {
+	position: absolute;
+	top: -30%;
+	left: -80%;
+	width: 55%;
+	height: 170%;
+	background: linear-gradient(90deg, transparent, rgb(255 255 255 / 55%), transparent);
+	transform: rotate(18deg);
+	transition: left 700ms ease;
+	pointer-events: none;
+}
+
+.services-card:hover .services-card-shine {
+	left: 125%;
+}
+
+.services-card-orbit {
+	position: absolute;
+	top: -5rem;
+	right: -5rem;
+	width: 12rem;
+	height: 12rem;
+	border: 1px solid rgb(236 72 153 / 18%);
+	border-radius: 9999px;
+	transition: transform 700ms ease, border-color 700ms ease;
+	pointer-events: none;
+}
+
+.services-card:hover .services-card-orbit {
+	transform: scale(1.35) rotate(22deg);
+	border-color: rgb(236 72 153 / 38%);
+}
+
+@keyframes service-card-appear {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes botanical-sway {
+	0%,
+	100% {
+		transform: rotate(-3deg) translateY(0);
+	}
+	50% {
+		transform: rotate(3deg) translateY(-8px);
+	}
+}
+
 .hero-bubble {
 	position: absolute;
 	display: block;
@@ -131,7 +220,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.hero-bubble {
+	.hero-bubble,
+	.services-botanical,
+	.services-card,
+	.services-card-shine {
 		animation: none;
+		transition: none;
 	}
 }
