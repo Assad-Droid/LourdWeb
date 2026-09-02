@@ -4,21 +4,21 @@ const services = [
     name: "Classic Manicure",
     description: "Clean, polished, and beautifully finished.",
     price: "₪80",
-    duration: "45 min",
+   
   },
   {
     id: 2,
     name: "Gel Manicure",
     description: "Long-lasting color with a smooth, flawless finish.",
     price: "₪120",
-    duration: "60 min",
+  
   },
   {
     id: 3,
     name: "Nail Extensions",
     description: "Custom length and shape designed especially for you.",
     price: "₪180",
-    duration: "90 min",
+   
   },
 ];
 
@@ -97,9 +97,7 @@ function Services() {
                   <span className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-600">
                     Signature service
                   </span>
-                  <span className="rounded-full border border-white/80 bg-white/55 px-3 py-1 text-xs font-medium text-gray-600 backdrop-blur-sm">
-                    {service.duration}
-                  </span>
+                
                 </div>
 
                 <h3 className="relative max-w-[12rem] text-3xl font-semibold leading-tight tracking-tight text-gray-900">

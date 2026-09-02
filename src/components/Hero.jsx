@@ -3,18 +3,18 @@ import logo from "../assets/applogo.png";
 function Hero() {
   return (
     <section id="home" className="relative flex min-h-screen items-center overflow-hidden bg-[#F8C8DC]">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+       {/* <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <span className="hero-bubble hero-bubble-one" />
         <span className="hero-bubble hero-bubble-two" />
         <span className="hero-bubble hero-bubble-three" />
         <span className="hero-bubble hero-bubble-four" />
         <span className="hero-bubble hero-bubble-five" />
-      </div>
+      </div>*/} {/* removing bubbles */}
 
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-8 px-6 py-16 sm:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-4 lg:px-16 lg:py-20">
         <div className="max-w-xl -translate-y-8 text-left sm:-translate-y-12 lg:ml-[12%] lg:-translate-y-20">
         
-          <h1 className="mt-1 text-8xl font-bold leading-tight text-gray-800 transition-all duration-500 hover:text-pink-500 hover:drop-shadow-[0_0_18px_rgba(236,72,153,0.7)] sm:text-8xl">
+          <h1 className="hero-brand mt-1 ml-1 inline-block whitespace-nowrap p-1 pr-3 text-6xl font-bold leading-[0.9] text-gray-800 transition-all duration-500 hover:text-pink-500 hover:drop-shadow-[0_0_18px_rgba(236,72,153,0.7)] sm:text-7xl lg:text-8xl">
             LOURD
           </h1>
           <h2 className="mt-5 text-xl font-semibold leading-snug text-gray-600 sm:text-2xl">

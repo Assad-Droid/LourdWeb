@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import Services from "./components/services";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
 function InstagramIcon() {
   return (
@@ -61,6 +62,8 @@ function Home() {
       <Services />
       <About />
       <Contact />
+      <Footer />
+      
     </>
   );
 }

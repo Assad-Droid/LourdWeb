@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,ital,wght@6..96,0,600;6..96,1,600&display=swap");
+
+.hero-brand {
+	font-family: "Bodoni Moda", Georgia, serif;
+	font-style: italic;
+	letter-spacing: 0.08em;
+	overflow: visible;
+	background: linear-gradient(135deg, #4a2634 10%, #be185d 55%, #ec4899 90%);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	text-shadow: 0 8px 18px rgb(190 24 93 / 16%);
+}
+
 @keyframes hero-bubble-float {
 	0%,
 	100% {
