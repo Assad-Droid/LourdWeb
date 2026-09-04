@@ -4,7 +4,12 @@ const services = [
     name: "Classic Manicure",
     description: "Clean, polished, and beautifully finished.",
     price: "₪80",
-   
+    images: [
+      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=85",
+      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=400&q=85",
+      "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&w=400&q=85",
+      "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=400&q=85",
+    ],
   },
   {
     id: 2,
@@ -89,7 +94,11 @@ function Services() {
               <span aria-hidden="true" className="services-card-orbit" />
 
               <div className="service-image-slot relative aspect-[4/5] w-[28%] shrink-0 overflow-hidden rounded-[1.25rem] border border-white/70 sm:w-[27%] sm:rounded-[1.5rem]">
+                {service.images ? (
+                  <img src={service.images[0]} alt={`${service.name} sample`} className="h-full w-full object-cover" />
+                ) : (
                   <span aria-hidden="true" className="service-image-glow" />
+                )}
               </div>
 
               <div className="relative flex min-w-0 flex-1 flex-col justify-center py-2">
@@ -109,7 +118,11 @@ function Services() {
 
                 <div className="relative mt-5 grid max-w-[22rem] grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
                   {[1, 2, 3].map((miniImage) => (
-                    <div key={miniImage} className="service-mini-image-slot aspect-square rounded-lg border border-white/80 sm:rounded-xl" />
+                    <div key={miniImage} className="service-mini-image-slot aspect-square overflow-hidden rounded-lg border border-white/80 sm:rounded-xl">
+                      {service.images && (
+                        <img src={service.images[miniImage]} alt={`${service.name} detail ${miniImage}`} className="h-full w-full object-cover" />
+                      )}
+                    </div>
                   ))}
                 </div>
 
