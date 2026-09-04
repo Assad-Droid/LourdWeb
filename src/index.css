@@ -167,6 +167,31 @@
 	box-shadow: inset 0 0 0 1px rgb(255 255 255 / 32%);
 }
 
+.service-mini-card {
+	animation: service-mini-card-cycle 9s ease-in-out infinite;
+	box-shadow: 0 8px 16px rgb(190 24 93 / 14%);
+	transform: translate(-50%, -50%);
+	transform-origin: center;
+	will-change: transform, opacity;
+}
+
+.service-mini-gallery {
+	perspective: 700px;
+}
+
+.service-mini-gallery:hover .service-mini-card,
+.service-mini-gallery:focus-within .service-mini-card {
+	animation-play-state: paused;
+}
+
+.service-mini-card-2 {
+	animation-delay: -3s;
+}
+
+.service-mini-card-3 {
+	animation-delay: -6s;
+}
+
 .service-image-slot::after {
 	position: absolute;
 	inset: 12%;
@@ -207,6 +232,33 @@
 	}
 }
 
+@keyframes service-mini-card-cycle {
+	0%,
+	24% {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+		z-index: 3;
+	}
+	30%,
+	36% {
+		opacity: 0.72;
+		transform: translate(0%, -65%) scale(0.82);
+		z-index: 1;
+	}
+	42%,
+	88% {
+		opacity: 0.62;
+		transform: translate(-100%, -35%) scale(0.82);
+		z-index: 1;
+	}
+	94%,
+	100% {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+		z-index: 3;
+	}
+}
+
 @keyframes botanical-sway {
 	0%,
 	100% {
@@ -214,6 +266,30 @@
 	}
 	50% {
 		transform: rotate(3deg) translateY(-8px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.service-mini-card {
+		animation: none;
+	}
+
+	.service-mini-card-1 {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+		z-index: 3;
+	}
+
+	.service-mini-card-2 {
+		opacity: 0.72;
+		transform: translate(0%, -65%) scale(0.82);
+		z-index: 1;
+	}
+
+	.service-mini-card-3 {
+		opacity: 0.62;
+		transform: translate(-100%, -35%) scale(0.82);
+		z-index: 1;
 	}
 }
 
