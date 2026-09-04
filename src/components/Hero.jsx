@@ -14,9 +14,9 @@ function Hero() {
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-8 px-6 py-16 sm:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-4 lg:px-16 lg:py-20">
         <div className="max-w-xl -translate-y-8 text-left sm:-translate-y-12 lg:ml-[12%] lg:-translate-y-20">
         
-          <h1 className="hero-brand mt-1 ml-1 inline-block whitespace-nowrap p-1 pr-3 text-6xl font-bold leading-[0.9] text-gray-800 transition-all duration-500 hover:text-pink-500 hover:drop-shadow-[0_0_18px_rgba(236,72,153,0.7)] sm:text-7xl lg:text-8xl">
-            LOURD
-          </h1>
+       <h1 className="hero-brand mt-1 ml-0 inline-block whitespace-nowrap p-1 pr-3 text-6xl font-cormorant italic font-medium leading-[0.9] text-gray-800 transition-all duration-500 hover:text-pink-500 hover:drop-shadow-[0_0_18px_rgba(236,72,153,0.7)] sm:text-7xl lg:text-8xl">
+  LOURD
+</h1>
           <h2 className="mt-5 text-xl font-semibold leading-snug text-gray-600 sm:text-2xl">
             PROFESSIONAL NAIL SERVICES
           </h2>
