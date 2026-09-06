@@ -33,58 +33,52 @@ function Navbar() {
   }, []);
 
   return (
-    <header className="h-[88px]">
-      <nav className="fixed inset-x-0 top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+    <header className="h-[76px] sm:h-[84px] lg:h-[88px]">
+      <nav className="fixed inset-x-0 top-0 z-50 w-full bg-[#FFFFFF]/90 shadow-sm backdrop-blur-sm">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+          <a href="#home" aria-label="Home" className="flex-shrink-0">
+            <img
+              src={logo}
+              alt="Nail salon logo"
+              className="h-10 w-auto object-contain sm:h-12"
+            />
+          </a>
 
-        {/* Logo */}
-        <a href="#home" aria-label="Home">
-          <img
-            src={logo}
-            alt="Nail salon logo"
-            className="h-12 w-auto object-contain"
-          />
-        </a>
+          <div className="hidden items-center gap-6 lg:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`
+                  relative text-sm font-medium transition-all duration-300
+                  ${activeSection === link.href
+                    ? "text-pink-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.65)] after:scale-x-100"
+                    : "text-gray-800"}
+                  transition-colors duration-200
+                  after:absolute after:-bottom-2 after:left-0
+                  after:h-[2px] after:w-full after:origin-left
+                  after:scale-x-0 after:bg-pink-400
+                  after:transition-transform after:duration-300
+                  hover:text-pink-500 hover:after:scale-x-100
+                `}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
 
-        {/* Navigation */}
-        <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={`
-                relative text-sm font-medium transition-all duration-300
-                ${activeSection === link.href
-                  ? "text-pink-500 drop-shadow-[0_0_10px_rgba(236,72,153,0.65)] after:scale-x-100"
-                  : "text-gray-800"}
-                transition-colors duration-200
-                after:absolute after:-bottom-2 after:left-0
-                after:h-[2px] after:w-full after:origin-left
-                after:scale-x-0 after:bg-pink-400
-                after:transition-transform after:duration-300
-                hover:text-pink-500 hover:after:scale-x-100
-              `}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Booking */}
-        <a
-          href="/booking"
-          className="
-            relative text-sm font-medium text-gray-800
-            transition-colors duration-200
-            after:absolute after:-bottom-2 after:left-0
-            after:h-[2px] after:w-full after:origin-left
-            after:scale-x-0 after:bg-pink-400
-            after:transition-transform after:duration-300
-            hover:text-pink-500 hover:after:scale-x-100
-          "
-        >
-          Book Appointment
-        </a>
+          <a
+            href="/booking"
+            className="
+              relative rounded-full border border-pink-200 bg-pink-50 px-3 py-2 text-[10px] font-semibold text-gray-800
+              transition-all duration-200 hover:text-pink-500 sm:px-4 sm:text-xs lg:text-sm
+              lg:border-0 lg:bg-transparent lg:p-0 lg:after:absolute lg:after:-bottom-2 lg:after:left-0
+              lg:after:h-[2px] lg:after:w-full lg:after:origin-left lg:after:scale-x-0 lg:after:bg-pink-400
+              lg:after:transition-transform lg:after:duration-300 lg:hover:after:scale-x-100
+            "
+          >
+            Book
+          </a>
         </div>
       </nav>
     </header>
