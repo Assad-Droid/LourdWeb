@@ -1,49 +1,10 @@
 import { useEffect, useState } from "react";
-
-const services = [
-  {
-    id: 1,
-    name: "Classic Manicure",
-    description: "Clean, polished, and beautifully finished.",
-    price: "₪80",
-    duration: "45 min",
-    images: [
-      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=85",
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=400&q=85",
-      "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&w=400&q=85",
-      "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=400&q=85",
-    ],
-  },
-  {
-    id: 2,
-    name: "Gel Manicure",
-    description: "Long-lasting color with a smooth, flawless finish.",
-    price: "₪120",
-    duration: "60 min",
-    images: [
-      "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&w=900&q=85",
-      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=400&q=85",
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=400&q=85",
-      "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=400&q=85",
-    ],
-  },
-  {
-    id: 3,
-    name: "Nail Extensions",
-    description: "Custom length and shape designed especially for you.",
-    price: "₪180",
-    duration: "90 min",
-    images: [
-      "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=900&q=85",
-      "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&w=400&q=85",
-      "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=400&q=85",
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=400&q=85",
-    ],
-  },
-];
+import { useNavigate } from "react-router-dom";
+import { services } from "../data/services";
 
 function Services() {
   const [selectedService, setSelectedService] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const closeOnEscape = (event) => {
@@ -229,42 +190,20 @@ function Services() {
               </h2>
               <p className="mt-4 max-w-md text-sm leading-6 text-gray-600">{selectedService.description}</p>
 
-              <div className="mt-6 grid grid-cols-2 gap-3 border-y border-pink-100 py-5">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Duration</p>
-                  <p className="mt-1 font-semibold text-gray-900">{selectedService.duration}</p>
-                </div>
+              <div className="mt-6 border-y border-pink-100 py-5">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Starting at</p>
                   <p className="mt-1 font-semibold text-gray-900">{selectedService.price}</p>
                 </div>
               </div>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <label className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">
-                  Preferred date
-                  <input type="date" className="mt-2 block w-full rounded-xl border border-pink-100 bg-white px-3 py-3 text-sm font-normal tracking-normal text-gray-800 outline-none focus:border-pink-400" />
-                </label>
-                <label className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600">
-                  Preferred time
-                  <select defaultValue="" className="mt-2 block w-full rounded-xl border border-pink-100 bg-white px-3 py-3 text-sm font-normal tracking-normal text-gray-800 outline-none focus:border-pink-400">
-                    <option value="" disabled>Select a time</option>
-                    <option>10:00 AM</option>
-                    <option>12:00 PM</option>
-                    <option>2:00 PM</option>
-                    <option>4:00 PM</option>
-                  </select>
-                </label>
-              </div>
-
               <button
                 type="button"
-                onClick={() => window.open("https://wa.me/", "_blank", "noopener,noreferrer")}
+                onClick={() => navigate("/booking", { state: { serviceId: selectedService.id } })}
                 className="mt-7 inline-flex items-center justify-center rounded-full bg-[#3b2434] px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-pink-700"
               >
-                Request this appointment
+                Book now
               </button>
-              <p className="mt-3 text-center text-xs text-gray-500">We&apos;ll confirm availability with you on WhatsApp.</p>
             </div>
           </div>
         </div>
