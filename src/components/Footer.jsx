@@ -2,7 +2,7 @@ function Footer() {
   const quickLinks = [
     { label: "Home", href: "/" },
     { label: "Services", href: "#services" },
-    { label: "Gallery", href: "#gallery" },
+   /* { label: "Gallery", href: "#gallery" },*/
     { label: "About", href: "#about" },
     { label: "Contact", href: "#contact" },
   ];
