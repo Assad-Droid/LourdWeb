@@ -15,7 +15,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="bg-[#3B2434] text-white">
+    <footer className="bg-[#ffffff] text-[#3B2434]">
       <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
 
@@ -27,19 +27,19 @@ function Footer() {
               className="mb-5 h-14 w-auto"
             />
 
-            <p className="max-w-xs text-sm leading-6 text-[#D8B8C8]">
+            <p className="max-w-xs text-sm leading-6 text-[#3B2434]">
               Enhancing your beauty with passion, precision,
               and the perfect touch.
             </p>
 
-            <span className="mt-5 block text-xl text-[#F8C8DC]">
+            <span className="mt-5 block text-xl text-[#3B2434]">
               ♥
             </span>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[#F8C8DC]">
+            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[#3B2434]">
               Quick Links
             </h3>
 
@@ -48,7 +48,7 @@ function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-[#D8B8C8] transition-colors duration-200 hover:text-white"
+                    className="text-sm text-[#3B2434] transition-colors duration-200 hover:text-pink-600"
                   >
                     {link.label}
                   </a>
@@ -59,7 +59,7 @@ function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[#F8C8DC]">
+            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[#3B2434]">
               Services
             </h3>
 
@@ -67,7 +67,7 @@ function Footer() {
               {services.map((service) => (
                 <li
                   key={service}
-                  className="text-sm text-[#D8B8C8]"
+                  className="text-sm text-[#3B2434]"
                 >
                   {service}
                 </li>
@@ -77,11 +77,11 @@ function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[#F8C8DC]">
+            <h3 className="mb-5 text-sm font-semibold uppercase tracking-wider text-[#3B2434]">
               Contact
             </h3>
 
-            <div className="space-y-3 text-sm text-[#D8B8C8]">
+            <div className="space-y-3 text-sm text-[#3B2434]">
               <p>📞 050-123-4567</p>
               <p>📷 @lm.nailstudio</p>
               <p>📍 Jerusalem, Palestine</p>
@@ -89,7 +89,7 @@ function Footer() {
 
             <a
               href="/booking"
-              className="mt-6 inline-block border-b border-[#F8C8DC] pb-1 text-sm font-medium text-[#F8C8DC] transition-colors duration-200 hover:text-white"
+              className="mt-6 inline-block border-b border-[#3B2434] pb-1 text-sm font-medium text-[#3B2434] transition-colors duration-200 hover:text-pink-600 hover:border-pink-600"
             >
               Book your appointment →
             </a>
@@ -98,7 +98,7 @@ function Footer() {
 
         {/* Bottom */}
         <div className="mt-12 border-t border-white/15 pt-6 text-center">
-          <p className="text-sm text-[#D8B8C8]">
+          <p className="text-sm text-[#3B2434]">
             © 2026 LM Nail Studio. All rights reserved.
           </p>
         </div>
