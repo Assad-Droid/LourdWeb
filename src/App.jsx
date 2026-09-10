@@ -6,6 +6,7 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Booking from "./pages/Booking";
+import SeeAllServices from "./pages/SeeAllServices";
 
 function InstagramIcon() {
   return (
@@ -75,6 +76,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/booking" element={<Booking />} />
+        <Route path="/seeallservices" element={<SeeAllServices />} />
       </Routes>
     </BrowserRouter>
   );

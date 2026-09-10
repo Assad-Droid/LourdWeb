@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { services } from "../data/services";
+import { designOptions, serviceOptions } from "../data/bookingOptions";
 
 const appointmentTimes = ["10:00 AM", "11:30 AM", "1:00 PM", "2:30 PM", "4:00 PM", "5:30 PM"];
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -47,11 +48,17 @@ function Booking() {
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedPhoneCountry, setSelectedPhoneCountry] = useState(phoneCountries[0].code);
   const [customerDetails, setCustomerDetails] = useState({ name: "", phone: "", email: "" });
+  const [selectedDesignIds, setSelectedDesignIds] = useState([]);
+  const [selectedOptionIds, setSelectedOptionIds] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const selectedService = services.find((service) => String(service.id) === selectedServiceId);
   const selectedPhoneCountryDetails = phoneCountries.find((country) => country.code === selectedPhoneCountry) || phoneCountries[0];
-  const totalPrice = selectedService?.price || "₪0";
+  const selectedDesigns = designOptions.filter((design) => selectedDesignIds.includes(design.id));
+  const selectedOptions = serviceOptions.filter((option) => selectedOptionIds.includes(option.id));
+  const basePrice = Number.parseInt(selectedService?.price.replace(/[^0-9]/g, "") || "0", 10);
+  const addOnPrice = selectedDesigns.reduce((sum, design) => sum + design.price, 0) + selectedOptions.reduce((sum, option) => sum + option.price, 0);
+  const totalPrice = `₪${basePrice + addOnPrice}`;
   const calendarDays = getCalendarDays(calendarMonth);
   const monthLabel = calendarMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const isCurrentMonth = calendarMonth.getFullYear() === today.getFullYear() && calendarMonth.getMonth() === today.getMonth();
@@ -75,6 +82,11 @@ function Booking() {
 
   const updateCustomerDetails = (field, value) => {
     setCustomerDetails((currentDetails) => ({ ...currentDetails, [field]: value }));
+    setIsSubmitted(false);
+  };
+
+  const toggleSelection = (id, setSelectedIds) => {
+    setSelectedIds((currentIds) => currentIds.includes(id) ? currentIds.filter((currentId) => currentId !== id) : [...currentIds, id]);
     setIsSubmitted(false);
   };
 
@@ -146,7 +158,40 @@ function Booking() {
             </section>
 
             <section className="rounded-[1.75rem] border border-pink-100 bg-white p-5 shadow-[0_16px_40px_rgba(190,24,93,0.06)] sm:p-7">
-              <div className="mb-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-500">Step 4</p><h2 className="mt-2 text-2xl font-semibold">Your details</h2><p className="mt-2 text-sm text-gray-500">We&apos;ll use these details to confirm your appointment.</p></div>
+              <div className="mb-5 flex items-end justify-between gap-4">
+                <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-500">Step 4</p><h2 className="mt-2 text-2xl font-semibold">Choose your designs</h2></div>
+                <span className="text-xs text-gray-400">Select multiple</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {designOptions.map((design) => {
+                  const isSelected = selectedDesignIds.includes(design.id);
+                  return <button key={design.id} type="button" onClick={() => toggleSelection(design.id, setSelectedDesignIds)} className={`overflow-hidden rounded-2xl border text-left transition ${isSelected ? "border-pink-500 bg-pink-50 ring-2 ring-pink-200" : "border-gray-100 hover:-translate-y-0.5 hover:border-pink-200"}`}>
+                    <img src={design.image} alt="" className="aspect-square w-full object-cover" />
+                    <span className="block p-3"><span className="block truncate text-xs font-semibold sm:text-sm">{design.name}</span><span className="mt-1 block text-xs text-pink-600">+₪{design.price}</span></span>
+                  </button>;
+                })}
+              </div>
+            </section>
+
+            <section className="rounded-[1.75rem] border border-pink-100 bg-white p-5 shadow-[0_16px_40px_rgba(190,24,93,0.06)] sm:p-7">
+              <div className="mb-5 flex items-end justify-between gap-4">
+                <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-500">Step 5</p><h2 className="mt-2 text-2xl font-semibold">Add finishing touches</h2></div>
+                <span className="text-xs text-gray-400">Select multiple</span>
+              </div>
+              <div className="space-y-3">
+                {serviceOptions.map((option) => {
+                  const isSelected = selectedOptionIds.includes(option.id);
+                  return <button key={option.id} type="button" onClick={() => toggleSelection(option.id, setSelectedOptionIds)} className={`flex w-full items-center gap-4 rounded-2xl border p-3 text-left transition ${isSelected ? "border-pink-500 bg-pink-50 ring-2 ring-pink-200" : "border-gray-100 hover:border-pink-200"}`}>
+                    <img src={option.image} alt="" className="h-16 w-16 shrink-0 rounded-xl object-cover" />
+                    <span className="min-w-0 flex-1"><span className="block font-semibold text-gray-900">{option.name}</span><span className="mt-1 block text-xs leading-5 text-gray-500">{option.description}</span></span>
+                    <span className="shrink-0 text-sm font-semibold text-pink-600">+₪{option.price}</span>
+                  </button>;
+                })}
+              </div>
+            </section>
+
+            <section className="rounded-[1.75rem] border border-pink-100 bg-white p-5 shadow-[0_16px_40px_rgba(190,24,93,0.06)] sm:p-7">
+              <div className="mb-5"><p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-500">Step 6</p><h2 className="mt-2 text-2xl font-semibold">Your details</h2><p className="mt-2 text-sm text-gray-500">We&apos;ll use these details to confirm your appointment.</p></div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-600 sm:col-span-2">
                   Full name
@@ -190,7 +235,7 @@ function Booking() {
             <h2 className="mt-3 text-2xl font-semibold">Almost there</h2>
             <div className="my-7 h-px bg-white/15" />
             {selectedService ? <div className="flex gap-4"><img src={selectedService.images[0]} alt="" className="h-16 w-16 rounded-xl object-cover" /><div><p className="font-semibold">{selectedService.name}</p><p className="mt-1 text-sm text-pink-100">Service selected</p></div></div> : <p className="rounded-xl border border-white/15 bg-white/5 p-4 text-sm leading-6 text-pink-100">Select a service above to build your appointment.</p>}
-            <dl className="mt-7 space-y-4 border-t border-white/15 pt-5 text-sm"><div className="flex justify-between gap-4"><dt className="text-pink-100">Date</dt><dd className="text-right font-medium">{formatDate(selectedDate)}</dd></div><div className="flex justify-between gap-4"><dt className="text-pink-100">Time</dt><dd className="text-right font-medium">{selectedTime || "Choose a time"}</dd></div><div className="flex justify-between gap-4 border-t border-white/15 pt-4"><dt className="font-semibold text-pink-100">Total price</dt><dd className="text-right text-lg font-semibold text-white">{totalPrice}</dd></div></dl>
+            <dl className="mt-7 space-y-4 border-t border-white/15 pt-5 text-sm"><div className="flex justify-between gap-4"><dt className="text-pink-100">Date</dt><dd className="text-right font-medium">{formatDate(selectedDate)}</dd></div><div className="flex justify-between gap-4"><dt className="text-pink-100">Time</dt><dd className="text-right font-medium">{selectedTime || "Choose a time"}</dd></div><div className="flex justify-between gap-4"><dt className="text-pink-100">Add-ons</dt><dd className="text-right font-medium">{selectedDesigns.length + selectedOptions.length ? `+₪${addOnPrice}` : "None"}</dd></div><div className="flex justify-between gap-4 border-t border-white/15 pt-4"><dt className="font-semibold text-pink-100">Total price</dt><dd className="text-right text-lg font-semibold text-white">{totalPrice}</dd></div></dl>
             <button type="submit" disabled={!selectedService || !selectedTime || !customerDetails.name || !customerDetails.phone || !customerDetails.email} className="mt-8 w-full rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-[#3b2434] transition hover:-translate-y-0.5 hover:bg-pink-100 disabled:cursor-not-allowed disabled:opacity-45">Confirm appointment</button>
             <p className="mt-4 text-center text-xs leading-5 text-pink-100/75">We&apos;ll confirm your appointment details with you.</p>
           </aside>
