@@ -1,4 +1,5 @@
 import logo from "../assets/applogo.png";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
@@ -23,12 +24,12 @@ function Hero() {
           <p className="mt-4 text-lg text-gray-600">
             &quot;I&apos;m nicer when I like my nails.&quot;
           </p>
-          <a
-            href="/booking"
+          <Link
+            to="/booking"
             className="mt-8 inline-flex rounded-full border border-white/70 bg-white/20 px-7 py-3 text-sm font-semibold text-pink-950 shadow-[0_8px_24px_rgba(190,24,93,0.16),inset_0_1px_0_rgba(255,255,255,0.9),inset_0_-1px_0_rgba(255,255,255,0.25)] backdrop-blur-xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-white hover:bg-white/35 hover:text-pink-950 hover:shadow-[0_12px_30px_rgba(190,24,93,0.28),0_0_22px_rgba(244,114,182,0.65),inset_0_1px_0_rgba(255,255,255,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pink-500"
           >
             Book Appointment
-          </a>
+          </Link>
         </div>
 
         <div className="flex justify-center lg:justify-end">

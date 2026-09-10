@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/applogo.png";
 
 const navLinks = [
@@ -67,8 +68,8 @@ function Navbar() {
             ))}
           </div>
 
-          <a
-            href="/booking"
+          <Link
+            to="/booking"
             className="
               relative rounded-full border border-pink-200 bg-pink-50 px-3 py-2 text-[10px] font-semibold text-gray-800
               transition-all duration-200 hover:text-pink-500 sm:px-4 sm:text-xs lg:text-sm
@@ -78,7 +79,7 @@ function Navbar() {
             "
           >
             Book
-          </a>
+          </Link>
         </div>
       </nav>
     </header>

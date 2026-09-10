@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Footer() {
   const quickLinks = [
     { label: "Home", href: "/" },
@@ -87,12 +89,12 @@ function Footer() {
               <p>📍 Jerusalem, Palestine</p>
             </div>
 
-            <a
-              href="/booking"
+            <Link
+              to="/booking"
               className="mt-6 inline-block border-b border-[#3B2434] pb-1 text-sm font-medium text-[#3B2434] transition-colors duration-200 hover:text-pink-600 hover:border-pink-600"
             >
               Book your appointment →
-            </a>
+            </Link>
           </div>
         </div>
 
