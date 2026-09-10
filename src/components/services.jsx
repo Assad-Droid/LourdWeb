@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { services } from "../data/services";
 
 function Services() {
@@ -55,7 +55,7 @@ function Services() {
           </p>
 
           <h2 className="text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
-            What I Offer
+            Nail Menu
           </h2>
 
           <p className="mt-5 text-base leading-7 text-gray-500 sm:text-lg">
@@ -64,15 +64,15 @@ function Services() {
           </p>
         
         </div>
-          <div className="ml-150 mb-10 max-w-4xl text-right px-4">
-          <a 
-          href="/seeallservices"
-          className="mt-4 inline-block text-xs font-semibold uppercase tracking-[0.2em] text-pink-600 underline transition-colors duration-200 hover:text-pink-500"> see all services</a>
+          <div className="mb-10 flex justify-end px-4">
+          <Link
+          to="/seeallservices"
+          className="mt-4 inline-block text-xs font-semibold uppercase tracking-[0.2em] text-pink-600 underline transition-colors duration-200 hover:text-pink-500"> see all services</Link>
 
         </div>
 
         <div className="grid gap-6">
-          {services.map((service) => (
+          {services.slice(0, 3).map((service) => (
             <article
               key={service.id}
               onClick={() => setSelectedService(service)}
