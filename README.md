@@ -1,4 +1,9 @@
 # nail-booking
+
+## Deployment
+
+The production deployment tracks the `main` branch. Push changes to `main` to trigger a new deployment.
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
