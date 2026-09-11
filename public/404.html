@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      const path = window.location.pathname + window.location.search + window.location.hash;
+      const basePath = window.location.pathname.endsWith("/")
+        ? window.location.pathname
+        : window.location.pathname.slice(0, window.location.pathname.lastIndexOf("/") + 1);
+
+      sessionStorage.setItem("spa-path", path);
+      window.location.replace(basePath || "/");
+    </script>
+  </head>
+  <body></body>
+</html>
