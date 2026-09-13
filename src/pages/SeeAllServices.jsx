@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { services } from "../data/services";
+import { useCatalog } from "../api/CatalogContext";
 
 function SeeAllServices() {
   const navigate = useNavigate();
+  const { services, isLoading, error } = useCatalog();
 
   return (
     <main className="min-h-screen bg-[#fdf8fa] px-5 py-10 sm:px-8 sm:py-14">
@@ -24,7 +25,10 @@ function SeeAllServices() {
           </p>
         </header>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {isLoading && <p className="text-center text-sm text-gray-500">Loading services...</p>}
+        {!isLoading && error && <p className="text-center text-sm text-red-600">{error}</p>}
+        {!isLoading && !error && services.length === 0 && <p className="text-center text-sm text-gray-500">No services are available right now.</p>}
+        {!isLoading && !error && services.length > 0 && <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
             <article key={service.id} className="group overflow-hidden rounded-[1.75rem] border border-pink-100 bg-white shadow-[0_14px_35px_rgba(190,24,93,0.07)] transition duration-300 hover:-translate-y-1 hover:border-pink-300 hover:shadow-[0_20px_42px_rgba(190,24,93,0.14)]">
               <div className="relative h-64 overflow-hidden">
@@ -52,7 +56,7 @@ function SeeAllServices() {
               </div>
             </article>
           ))}
-        </div>
+        </div>}
 
         <div className="mt-12 text-center">
           <p className="text-sm text-gray-500">Can&apos;t decide? We&apos;ll help you choose the right service.</p>

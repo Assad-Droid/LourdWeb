@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { services } from "../data/services";
+import { useCatalog } from "../api/CatalogContext";
 
 function Services() {
   const [selectedService, setSelectedService] = useState(null);
   const navigate = useNavigate();
+  const { services, isLoading, error } = useCatalog();
 
   useEffect(() => {
     const closeOnEscape = (event) => {
@@ -14,6 +15,19 @@ function Services() {
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, []);
+
+  if (isLoading || error || services.length === 0) {
+    return (
+      <section id="services" className="bg-white px-6 py-24 sm:py-32">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-medium uppercase tracking-[0.25em] text-pink-400">Professional Services</p>
+          <p className="mt-5 text-sm leading-7 text-gray-500">
+            {isLoading ? "Loading services..." : error || "No services are available right now."}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="services" className="relative overflow-hidden bg-white px-6 py-24 sm:py-32">

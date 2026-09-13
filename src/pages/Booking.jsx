@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { services } from "../data/services";
-import { designOptions, serviceOptions } from "../data/bookingOptions";
+import { useCatalog } from "../api/CatalogContext";
+import { createAppointment } from "../api/api";
 
 const appointmentTimes = ["10:00 AM", "11:30 AM", "1:00 PM", "2:30 PM", "4:00 PM", "5:30 PM"];
 const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -37,12 +37,27 @@ function formatDate(date) {
   return date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 }
 
+function formatApiDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatApiTime(time) {
+  const [clock, meridiem] = time.split(" ");
+  let [hours, minutes] = clock.split(":").map(Number);
+  if (meridiem === "PM" && hours !== 12) hours += 12;
+  if (meridiem === "AM" && hours === 12) hours = 0;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`;
+}
+
 function Booking() {
   const location = useLocation();
+  const { services, designs: designOptions, addOns: serviceOptions, isLoading, error } = useCatalog();
   const today = startOfDay(new Date());
   const initialServiceId = location.state?.serviceId;
-  const hasInitialService = services.some((service) => service.id === initialServiceId);
-  const [selectedServiceId, setSelectedServiceId] = useState(hasInitialService ? String(initialServiceId) : "");
+  const [selectedServiceId, setSelectedServiceId] = useState(initialServiceId ? String(initialServiceId) : "");
   const [selectedDate, setSelectedDate] = useState(today);
   const [calendarMonth, setCalendarMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedTime, setSelectedTime] = useState("");
@@ -51,6 +66,8 @@ function Booking() {
   const [selectedDesignIds, setSelectedDesignIds] = useState([]);
   const [selectedOptionIds, setSelectedOptionIds] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const selectedService = services.find((service) => String(service.id) === selectedServiceId);
   const selectedPhoneCountryDetails = phoneCountries.find((country) => country.code === selectedPhoneCountry) || phoneCountries[0];
@@ -62,6 +79,19 @@ function Booking() {
   const calendarDays = getCalendarDays(calendarMonth);
   const monthLabel = calendarMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const isCurrentMonth = calendarMonth.getFullYear() === today.getFullYear() && calendarMonth.getMonth() === today.getMonth();
+
+  if (isLoading || error || services.length === 0) {
+    return (
+      <main className="min-h-screen bg-[#fdf8fa] px-4 py-8 text-gray-900 sm:px-8 sm:py-12">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-medium uppercase tracking-[0.25em] text-pink-500">Your nail moment</p>
+          <p className={`mt-5 text-sm leading-7 ${error ? "text-red-600" : "text-gray-500"}`}>
+            {isLoading ? "Loading booking options..." : error || "No services are available right now."}
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   const changeMonth = (offset) => {
     const nextMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + offset, 1);
@@ -77,7 +107,24 @@ function Booking() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (selectedService && selectedTime && customerDetails.name && customerDetails.phone && customerDetails.email) setIsSubmitted(true);
+    if (!selectedService || !selectedTime || !customerDetails.name || !customerDetails.phone || !customerDetails.email) return;
+
+    setIsSubmitting(true);
+    setIsSubmitted(false);
+    setSubmitError("");
+    createAppointment({
+      customerName: customerDetails.name,
+      phoneCountryCode: selectedPhoneCountry,
+      phoneNumber: customerDetails.phone,
+      email: customerDetails.email,
+      appointmentDate: formatApiDate(selectedDate),
+      appointmentTime: formatApiTime(selectedTime),
+      serviceId: Number(selectedServiceId),
+      optionIds: [...selectedDesignIds, ...selectedOptionIds].map(Number),
+    })
+      .then(() => setIsSubmitted(true))
+      .catch((requestError) => setSubmitError(requestError.message || "Unable to save your appointment."))
+      .finally(() => setIsSubmitting(false));
   };
 
   const updateCustomerDetails = (field, value) => {
@@ -104,7 +151,61 @@ function Booking() {
           <p className="mt-4 text-base leading-7 text-gray-500">Choose a service, find a time that feels right, and leave the rest to us.</p>
         </header>
 
-        {isSubmitted && <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-800">Your request is ready for confirmation. We&apos;ll get back to you shortly.</div>}
+        {submitError && <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">{submitError}</div>}
+
+        {isSubmitted && (
+          <div
+            className="fixed inset-0 z-[70] flex items-center justify-center bg-[#3b2434]/45 p-4 backdrop-blur-sm"
+            role="presentation"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setIsSubmitted(false);
+            }}
+          >
+            <div
+              className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-white/80 bg-[#fffafc] shadow-[0_30px_90px_rgba(59,36,52,0.3)]"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="booking-success-title"
+            >
+              <div className="bg-[#3b2434] px-6 pb-8 pt-9 text-center text-white sm:px-10">
+                <button
+                  type="button"
+                  onClick={() => setIsSubmitted(false)}
+                  aria-label="Close confirmation"
+                  className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-xl text-white/80 transition hover:bg-white/10 hover:text-white"
+                >
+                  &times;
+                </button>
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-400 text-3xl font-semibold text-[#3b2434] shadow-[0_0_0_8px_rgba(52,211,153,0.16)]">
+                  ✓
+                </div>
+                <p className="mt-6 text-xs font-semibold uppercase tracking-[0.25em] text-pink-200">Appointment received</p>
+                <h2 id="booking-success-title" className="mt-3 text-3xl font-semibold tracking-tight">You&apos;re all booked in.</h2>
+                <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-pink-100">Your request is pending confirmation. We&apos;ll contact you shortly with the final details.</p>
+              </div>
+              <div className="space-y-4 p-6 sm:p-8">
+                <div className="flex items-center gap-4 rounded-2xl border border-pink-100 bg-pink-50/60 p-4">
+                  <img src={selectedService.images[0]} alt="" className="h-16 w-16 rounded-xl object-cover" />
+                  <div>
+                    <p className="font-semibold text-gray-900">{selectedService.name}</p>
+                    <p className="mt-1 text-sm text-gray-500">{formatDate(selectedDate)} at {selectedTime}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between border-t border-gray-100 pt-4 text-sm">
+                  <span className="text-gray-500">Estimated total</span>
+                  <span className="text-lg font-semibold text-[#3b2434]">{totalPrice}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsSubmitted(false)}
+                  className="w-full rounded-full bg-[#3b2434] px-5 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-pink-700"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
           <div className="space-y-6">
@@ -162,7 +263,7 @@ function Booking() {
                 <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-500">Step 4</p><h2 className="mt-2 text-2xl font-semibold">Choose your designs</h2></div>
                 <span className="text-xs text-gray-400">Select multiple</span>
               </div>
-              <div className="grid grid-cols-3 gap-3">
+              {designOptions.length === 0 ? <p className="text-sm text-gray-500">No designs are available right now.</p> : <div className="grid grid-cols-3 gap-3">
                 {designOptions.map((design) => {
                   const isSelected = selectedDesignIds.includes(design.id);
                   return <button key={design.id} type="button" onClick={() => toggleSelection(design.id, setSelectedDesignIds)} className={`overflow-hidden rounded-2xl border text-left transition ${isSelected ? "border-pink-500 bg-pink-50 ring-2 ring-pink-200" : "border-gray-100 hover:-translate-y-0.5 hover:border-pink-200"}`}>
@@ -170,7 +271,7 @@ function Booking() {
                     <span className="block p-3"><span className="block truncate text-xs font-semibold sm:text-sm">{design.name}</span><span className="mt-1 block text-xs text-pink-600">+₪{design.price}</span></span>
                   </button>;
                 })}
-              </div>
+              </div>}
             </section>
 
             <section className="rounded-[1.75rem] border border-pink-100 bg-white p-5 shadow-[0_16px_40px_rgba(190,24,93,0.06)] sm:p-7">
@@ -178,7 +279,7 @@ function Booking() {
                 <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-pink-500">Step 5</p><h2 className="mt-2 text-2xl font-semibold">Add finishing touches</h2></div>
                 <span className="text-xs text-gray-400">Select multiple</span>
               </div>
-              <div className="space-y-3">
+              {serviceOptions.length === 0 ? <p className="text-sm text-gray-500">No add-ons are available right now.</p> : <div className="space-y-3">
                 {serviceOptions.map((option) => {
                   const isSelected = selectedOptionIds.includes(option.id);
                   return <button key={option.id} type="button" onClick={() => toggleSelection(option.id, setSelectedOptionIds)} className={`flex w-full items-center gap-4 rounded-2xl border p-3 text-left transition ${isSelected ? "border-pink-500 bg-pink-50 ring-2 ring-pink-200" : "border-gray-100 hover:border-pink-200"}`}>
@@ -187,7 +288,7 @@ function Booking() {
                     <span className="shrink-0 text-sm font-semibold text-pink-600">+₪{option.price}</span>
                   </button>;
                 })}
-              </div>
+              </div>}
             </section>
 
             <section className="rounded-[1.75rem] border border-pink-100 bg-white p-5 shadow-[0_16px_40px_rgba(190,24,93,0.06)] sm:p-7">
@@ -236,7 +337,7 @@ function Booking() {
             <div className="my-7 h-px bg-white/15" />
             {selectedService ? <div className="flex gap-4"><img src={selectedService.images[0]} alt="" className="h-16 w-16 rounded-xl object-cover" /><div><p className="font-semibold">{selectedService.name}</p><p className="mt-1 text-sm text-pink-100">Service selected</p></div></div> : <p className="rounded-xl border border-white/15 bg-white/5 p-4 text-sm leading-6 text-pink-100">Select a service above to build your appointment.</p>}
             <dl className="mt-7 space-y-4 border-t border-white/15 pt-5 text-sm"><div className="flex justify-between gap-4"><dt className="text-pink-100">Date</dt><dd className="text-right font-medium">{formatDate(selectedDate)}</dd></div><div className="flex justify-between gap-4"><dt className="text-pink-100">Time</dt><dd className="text-right font-medium">{selectedTime || "Choose a time"}</dd></div><div className="flex justify-between gap-4"><dt className="text-pink-100">Add-ons</dt><dd className="text-right font-medium">{selectedDesigns.length + selectedOptions.length ? `+₪${addOnPrice}` : "None"}</dd></div><div className="flex justify-between gap-4 border-t border-white/15 pt-4"><dt className="font-semibold text-pink-100">Total price</dt><dd className="text-right text-lg font-semibold text-white">{totalPrice}</dd></div></dl>
-            <button type="submit" disabled={!selectedService || !selectedTime || !customerDetails.name || !customerDetails.phone || !customerDetails.email} className="mt-8 w-full rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-[#3b2434] transition hover:-translate-y-0.5 hover:bg-pink-100 disabled:cursor-not-allowed disabled:opacity-45">Confirm appointment</button>
+            <button type="submit" disabled={isSubmitting || !selectedService || !selectedTime || !customerDetails.name || !customerDetails.phone || !customerDetails.email} className="mt-8 w-full rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-[#3b2434] transition hover:-translate-y-0.5 hover:bg-pink-100 disabled:cursor-not-allowed disabled:opacity-45">{isSubmitting ? "Saving appointment..." : "Confirm appointment"}</button>
             <p className="mt-4 text-center text-xs leading-5 text-pink-100/75">We&apos;ll confirm your appointment details with you.</p>
           </aside>
         </form>
