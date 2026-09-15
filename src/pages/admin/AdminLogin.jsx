@@ -1,0 +1,9 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { adminLogin } from "../../api/adminApi";
+
+export default function AdminLogin() {
+  const navigate = useNavigate(); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [error, setError] = useState(""); const [loading, setLoading] = useState(false);
+  const submit = async (event) => { event.preventDefault(); setLoading(true); setError(""); try { await adminLogin(email, password); navigate("/admin", { replace: true }); } catch (requestError) { setError(requestError.message); } finally { setLoading(false); } };
+  return <main className="flex min-h-screen items-center justify-center bg-[#30252b] px-5 py-12"><form onSubmit={submit} className="w-full max-w-md rounded-3xl bg-[#fffaf8] p-8 shadow-2xl sm:p-10"><p className="text-xs font-semibold uppercase tracking-[0.3em] text-pink-600">LourdNails</p><h1 className="mt-4 text-3xl font-semibold">Welcome back</h1><p className="mt-2 text-sm text-gray-500">Sign in to manage your studio.</p>{error && <div className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</div>}<label className="mt-7 block text-sm font-medium">Email<input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-pink-400" /></label><label className="mt-4 block text-sm font-medium">Password<input required type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-gray-200 px-4 py-3 outline-none focus:border-pink-400" /></label><button disabled={loading} className="mt-7 w-full rounded-xl bg-[#30252b] px-4 py-3 font-semibold text-white transition hover:bg-pink-700 disabled:opacity-50">{loading ? "Signing in..." : "Sign in"}</button></form></main>;
+}

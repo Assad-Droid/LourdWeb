@@ -8,6 +8,11 @@ import Footer from "./components/Footer";
 import Booking from "./pages/Booking";
 import SeeAllServices from "./pages/SeeAllServices";
 import { CatalogProvider } from "./api/CatalogProvider";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import Appointments from "./pages/admin/Appointments";
+import CatalogManagement from "./pages/admin/CatalogManagement";
+import { AdminGuard } from "./pages/admin/AdminLayout";
 
 function InstagramIcon() {
   return (
@@ -79,6 +84,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/seeallservices" element={<SeeAllServices />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminGuard />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="appointments" element={<Appointments />} />
+            <Route path="services" element={<CatalogManagement kind="services" title="Services" eyebrow="Catalog" />} />
+            <Route path="designs" element={<CatalogManagement kind="designs" title="Designs" eyebrow="Catalog" />} />
+            <Route path="add-ons" element={<CatalogManagement kind="add-ons" title="Add-ons" eyebrow="Catalog" />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </CatalogProvider>
