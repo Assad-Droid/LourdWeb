@@ -26,9 +26,16 @@ export function AdminLayout() {
   </div>;
 }
 
-export function AdminGuard() {
+export function ProtectedRoute() {
   const navigate = useNavigate();
   const [state, setState] = useState("checking");
-  useEffect(() => { adminMe().then(() => setState("ready")).catch(() => navigate("/admin/login", { replace: true })); }, [navigate]);
+  useEffect(() => {
+    const handleExpired = () => navigate("/admin/login", { replace: true });
+    window.addEventListener("admin-auth-expired", handleExpired);
+    adminMe().then(() => setState("ready")).catch(handleExpired);
+    return () => window.removeEventListener("admin-auth-expired", handleExpired);
+  }, [navigate]);
   return state === "ready" ? <AdminLayout /> : <div className="flex min-h-screen items-center justify-center bg-[#f7f5f2] text-sm text-gray-500">Checking your session...</div>;
 }
+
+export const AdminGuard = ProtectedRoute;

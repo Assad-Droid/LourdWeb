@@ -5,21 +5,31 @@ function csrfCookie() {
 }
 
 async function ensureCsrfToken() {
-  if (!csrfCookie()) {
-    await fetch(`${API_BASE_URL}/api/auth/csrf`, { credentials: "include" });
-  }
-  return csrfCookie();
+  const response = await fetch(`${API_BASE_URL}/api/auth/csrf`, { credentials: "include" });
+  const body = await response.json().catch(() => null);
+  return body?.token || csrfCookie();
 }
 
-async function request(path, options = {}) {
-  const method = options.method || "GET";
-  const csrfToken = method === "GET" ? null : await ensureCsrfToken();
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+async function sendRequest(path, options, csrfToken) {
+  return fetch(`${API_BASE_URL}${path}`, {
     credentials: "include",
     headers: { "Content-Type": "application/json", ...(csrfToken ? { "X-XSRF-TOKEN": decodeURIComponent(csrfToken) } : {}), ...(options.headers || {}) },
     ...options,
   });
+}
+
+async function request(path, options = {}, hasRetried = false) {
+  const method = options.method || "GET";
+  const csrfToken = method === "GET" ? null : await ensureCsrfToken();
+  const response = await sendRequest(path, options, csrfToken);
+  if (response.status === 403 && method !== "GET" && !hasRetried) {
+    await ensureCsrfToken();
+    return request(path, options, true);
+  }
   if (!response.ok) {
+    if (response.status === 401) {
+      window.dispatchEvent(new CustomEvent("admin-auth-expired"));
+    }
     const body = await response.json().catch(() => null);
     throw new Error(body?.message || `Request failed (${response.status})`);
   }
@@ -31,7 +41,7 @@ export const adminMe = () => request("/api/auth/me");
 export const adminLogout = () => request("/api/auth/logout", { method: "POST" });
 export const getAdminAppointments = () => request("/api/appointments");
 export const updateAppointmentStatus = (id, status) => request(`/api/appointments/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) });
-export const getAdminCatalog = (kind) => request(`/api/admin/catalog/${kind === "services" ? "services" : `options/${kind === "designs" ? "DESIGN" : "ADD_ON"}`}`);
-export const createAdminCatalog = (kind, data) => request(`/api/admin/catalog/${kind === "services" ? "services" : `options/${kind === "designs" ? "DESIGN" : "ADD_ON"}`}`, { method: "POST", body: JSON.stringify(data) });
-export const updateAdminCatalog = (kind, id, data) => request(`/api/admin/catalog/${kind === "services" ? `services/${id}` : `options/${id}`}`, { method: "PUT", body: JSON.stringify(data) });
-export const deleteAdminCatalog = (kind, id) => request(`/api/admin/catalog/${kind === "services" ? `services/${id}` : `options/${id}`}`, { method: "DELETE" });
+export const getAdminCatalog = (kind) => request(`/api/${kind}`);
+export const createAdminCatalog = (kind, data) => request(`/api/${kind}`, { method: "POST", body: JSON.stringify(data) });
+export const updateAdminCatalog = (kind, id, data) => request(`/api/${kind}/${id}`, { method: "PUT", body: JSON.stringify(data) });
+export const deleteAdminCatalog = (kind, id) => request(`/api/${kind}/${id}`, { method: "DELETE" });
