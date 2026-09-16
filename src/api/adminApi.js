@@ -41,6 +41,7 @@ export const adminMe = () => request("/api/auth/me");
 export const adminLogout = () => request("/api/auth/logout", { method: "POST" });
 export const getAdminAppointments = () => request("/api/appointments");
 export const updateAppointmentStatus = (id, status) => request(`/api/appointments/${id}/status`, { method: "PATCH", body: JSON.stringify({ status }) });
+export const rescheduleAppointment = (id, appointmentDate, appointmentTime) => request(`/api/appointments/${id}/schedule`, { method: "PATCH", body: JSON.stringify({ appointmentDate, appointmentTime }) });
 export const getAdminCatalog = (kind) => request(`/api/${kind}`);
 export const createAdminCatalog = (kind, data) => request(`/api/${kind}`, { method: "POST", body: JSON.stringify(data) });
 export const updateAdminCatalog = (kind, id, data) => request(`/api/${kind}/${id}`, { method: "PUT", body: JSON.stringify(data) });
