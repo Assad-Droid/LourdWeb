@@ -6,6 +6,8 @@ function Services() {
   const [selectedService, setSelectedService] = useState(null);
   const navigate = useNavigate();
   const { services, isLoading, error } = useCatalog();
+  const featuredServices = services.filter((service) => service.featured).slice(0, 3);
+  const homeServices = featuredServices.length > 0 ? featuredServices : services.slice(0, 3);
 
   useEffect(() => {
     const closeOnEscape = (event) => {
@@ -22,7 +24,7 @@ function Services() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-[0.25em] text-pink-400">Professional Services</p>
           <p className="mt-5 text-sm leading-7 text-gray-500">
-            {isLoading ? "Loading services..." : error || "No services are available right now."}
+            {isLoading ? "Loading services..." : error || "Featured services will appear here soon."}
           </p>
         </div>
       </section>
@@ -86,7 +88,7 @@ function Services() {
         </div>
 
         <div className="grid gap-6">
-          {services.slice(0, 3).map((service) => (
+          {homeServices.map((service) => (
             <article
               key={service.id}
               onClick={() => setSelectedService(service)}
@@ -122,7 +124,7 @@ function Services() {
               <div className="relative flex min-w-0 flex-1 flex-col justify-center py-1 sm:py-2 lg:max-w-[38%]">
                 <div className="mb-3">
                   <span className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-600">
-                    Signature service
+                    {service.featured ? "Featured service" : "Signature service"}
                   </span>
                 </div>
 

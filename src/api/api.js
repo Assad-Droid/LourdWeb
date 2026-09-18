@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const resolveImageUrl = (value) => value?.startsWith("/") ? `${API_BASE_URL}${value}` : value;
 
 async function getJson(path) {
   const response = await fetch(`${API_BASE_URL}${path}`);
@@ -28,8 +29,8 @@ export async function getServices() {
   return services.map((service) => ({
     ...service,
     price: `₪${service.price}`,
-    duration: `${service.durationMinutes} min`,
-    images: [service.imageUrl, service.imageUrl, service.imageUrl, service.imageUrl],
+    featured: Boolean(service.featured),
+    images: [service.imageUrl, service.imageUrlTwo || service.imageUrl, service.imageUrlThree || service.imageUrl, service.imageUrlFour || service.imageUrl].map(resolveImageUrl),
   }));
 }
 
@@ -37,7 +38,7 @@ export async function getDesigns() {
   const designs = await getJson("/api/designs");
   return designs.map((design) => ({
     ...design,
-    image: design.imageUrl,
+    image: resolveImageUrl(design.imageUrl),
   }));
 }
 
@@ -45,6 +46,6 @@ export async function getAddOns() {
   const addOns = await getJson("/api/add-ons");
   return addOns.map((option) => ({
     ...option,
-    image: option.imageUrl,
+    image: resolveImageUrl(option.imageUrl),
   }));
 }

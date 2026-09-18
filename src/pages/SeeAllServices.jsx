@@ -34,7 +34,7 @@ function SeeAllServices() {
               <div className="relative h-64 overflow-hidden">
                 <img src={service.images[0]} alt={`${service.name} sample`} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                 <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-pink-700 backdrop-blur-sm">
-                  Signature service
+                  {service.featured ? "Featured service" : "More services"}
                 </span>
               </div>
               <div className="p-6">

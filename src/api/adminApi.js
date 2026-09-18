@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+export const resolveAdminImageUrl = (value) => value?.startsWith("/") ? `${API_BASE_URL}${value}` : value;
 
 function csrfCookie() {
   return document.cookie.split("; ").find((cookie) => cookie.startsWith("XSRF-TOKEN="))?.split("=")[1];
@@ -33,7 +34,9 @@ async function request(path, options = {}, hasRetried = false) {
     const body = await response.json().catch(() => null);
     throw new Error(body?.message || `Request failed (${response.status})`);
   }
-  return response.status === 204 ? null : response.json();
+  if (response.status === 204) return null;
+  const responseText = await response.text();
+  return responseText ? JSON.parse(responseText) : null;
 }
 
 export const adminLogin = (email, password) => request("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
@@ -46,3 +49,20 @@ export const getAdminCatalog = (kind) => request(`/api/${kind}`);
 export const createAdminCatalog = (kind, data) => request(`/api/${kind}`, { method: "POST", body: JSON.stringify(data) });
 export const updateAdminCatalog = (kind, id, data) => request(`/api/${kind}/${id}`, { method: "PUT", body: JSON.stringify(data) });
 export const deleteAdminCatalog = (kind, id) => request(`/api/${kind}/${id}`, { method: "DELETE" });
+
+export async function uploadAdminImage(file) {
+  const csrfToken = await ensureCsrfToken();
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await fetch(`${API_BASE_URL}/api/uploads/image`, {
+    method: "POST",
+    credentials: "include",
+    headers: csrfToken ? { "X-XSRF-TOKEN": decodeURIComponent(csrfToken) } : {},
+    body: formData,
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new Error(body?.message || `Image upload failed (${response.status})`);
+  }
+  return response.text();
+}

@@ -223,7 +223,7 @@ function Booking() {
                   return (
                     <button key={service.id} type="button" onClick={() => { setSelectedServiceId(String(service.id)); setIsSubmitted(false); }} className={`group overflow-hidden rounded-2xl border text-left transition ${isSelected ? "border-pink-500 bg-pink-50 ring-2 ring-pink-200" : "border-gray-100 bg-[#fffafb] hover:-translate-y-0.5 hover:border-pink-200"}`}>
                       <img src={service.images[0]} alt="" className="h-28 w-full object-cover" />
-                      <span className="block p-3"><span className="block text-sm font-semibold">{service.name}</span><span className="mt-1 block text-xs text-gray-500">Starting at {service.price}</span></span>
+                      <span className="block p-3">{service.featured && <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-pink-600">Featured</span>}<span className="block text-sm font-semibold">{service.name}</span><span className="mt-1 block text-xs text-gray-500">Starting at {service.price}</span></span>
                     </button>
                   );
                 })}
